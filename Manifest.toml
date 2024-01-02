@@ -697,7 +697,9 @@ version = "2.13.1+0"
 
 [[deps.FrequencyTrajectories]]
 deps = ["Chain", "DataFrames", "Interpolations", "Parameters", "RecipesBase", "StatsBase"]
-path = "/home/pierrebc/Documents/julia/dev/FrequencyTrajectories.jl/"
+git-tree-sha1 = "96cca0f94ed132ddd318cc9af301f2aa5fcd1e6d"
+repo-rev = "master"
+repo-url = "https://github.com/PierreBarrat/FrequencyTrajectories.jl"
 uuid = "a751bbe2-777c-4586-9b8f-8203e6b93e55"
 version = "0.1.0"
 
@@ -2249,7 +2251,7 @@ version = "1.6.1"
 [[deps.WrightFisher]]
 deps = ["Chain", "Dictionaries", "Distributions", "LinearAlgebra", "PoissonRandom", "RandomNumbers", "StatsBase"]
 git-tree-sha1 = "e97b5f1cca504e97e9f5e0cae38a01abeb14b95a"
-repo-rev = "vectorial_mu"
+repo-rev = "master"
 repo-url = "https://github.com/PierreBarrat/WrightFisher.jl"
 uuid = "28f02b08-ea27-4491-b13a-74513855a8ed"
 version = "0.1.0"
