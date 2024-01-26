@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.30
+# v0.19.36
 
 using Markdown
 using InteractiveUtils
@@ -56,13 +56,40 @@ function fraction_covered_by_sweeps(mβ, β2, ρ, α)
 end
 
 # ╔═╡ fae29d40-0bd5-43cb-ae2d-e264df34719e
-function frac_overlap(mβ, β2, ρ, α; K = 2)
+function frac_overlap_2(mβ, β2, ρ, α; K = 2)
 	# parameters of the B distribution
 	b = (mβ - β2)/(β2 - mβ^2)*(1-mβ)
 	a = mβ/(1-mβ)*b
 	# probability that s < ρ for a given sweep
 	integrand(t) = ρ*exp(-ρ*t)*beta_inc(a, b, 1-exp(-K/α/t))[1]
 	return quadgk(t -> integrand(t), 0, 5/ρ, rtol=1e-5)[1]
+end
+
+# ╔═╡ 6570d29c-4ad5-4110-9cb9-719c7997c913
+let
+	b = 3
+	a=2
+	B = Beta(a, b)
+	pdf(B, .2)
+	quadgk(x -> pdf(B, x), .01, .99)
+end
+
+# ╔═╡ bc2ad936-18fb-49a2-aaf2-d002a1f2bd90
+function frac_overlap(mβ, β2, ρ, α; ν = .75)
+	b = (mβ - β2)/(β2 - mβ^2)*(1-mβ)
+	a = mβ/(1-mβ)*b
+	B = Beta(a, b)
+
+	x0 = .02
+	s(β) = -α * log(1-β)
+	τ(β1, β2) = begin
+		t1 = 1/s(β1) * log(β1/x0 * ν/(1-ν))
+		t2 = 1/s(β2) * log(β2/x0 * (1-ν)/ν)
+		max(min(t1 - t2, 10/ρ), 0)
+	end
+
+	I1(β1) = quadgk(β2 -> pdf(B, β2)*(1-exp(-ρ*τ(β1, β2))), .001, .999, rtol=1e-5)[1]
+	return quadgk(β1 -> pdf(B, β1)*I1(β1), .001, .999, rtol=1e-5)[1]
 end
 
 # ╔═╡ 10987b07-70e0-4a19-9173-83cf487c08ff
@@ -136,6 +163,14 @@ dist_plts = map(zip(mβ_vals, β2_vals)) do (mβ, β2)
 	p = plot(xlabel="β", frame=:box, title="β distribution")
 	plot!(xvals, map(x -> pdf(B, x), xvals), label="", line=(:black))
 	p
+end
+
+# ╔═╡ 90a2ad74-db0b-4e6c-940c-6d6c140ff7b6
+let
+	ρvals = [1e-3, 1e-2, 1e-1, 1]
+	X1 = map(ρ -> frac_overlap(.3, .1, ρ, α; ν = .8), ρvals)
+	X2 = map(ρ -> frac_overlap_2(.3, .1, ρ, α; K=1), ρvals)
+	(X1, X2)
 end
 
 # ╔═╡ 51cdd66e-99d3-42f2-8dba-941b54ad6e34
@@ -250,6 +285,9 @@ end
 # ╠═9ff2d96e-4637-4699-a4a2-47f4d9887fa5
 # ╠═c9a65c7c-2b3b-403a-9141-6bc9fb316512
 # ╠═fae29d40-0bd5-43cb-ae2d-e264df34719e
+# ╠═6570d29c-4ad5-4110-9cb9-719c7997c913
+# ╠═bc2ad936-18fb-49a2-aaf2-d002a1f2bd90
+# ╠═90a2ad74-db0b-4e6c-940c-6d6c140ff7b6
 # ╠═72eb54ac-7424-496f-abe2-f43c687e8e6b
 # ╠═51cdd66e-99d3-42f2-8dba-941b54ad6e34
 # ╠═83eb61b1-622b-4b1d-a1bf-3a7a0a750cb5

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.30
+# v0.19.36
 
 using Markdown
 using InteractiveUtils
@@ -52,14 +52,25 @@ function fraction_covered_by_sweeps(mβ, β2, ρ, α)
 	return - 3 * ρ / α / mean(β -> log(1-β), rand(B, 1000))
 end
 
+# ╔═╡ 858d5cba-f3d4-4213-9e5a-0060078b32b3
+
+
 # ╔═╡ fae29d40-0bd5-43cb-ae2d-e264df34719e
-function frac_overlap(mβ, β2, ρ, α; K = 2)
-	# parameters of the B distribution
+function frac_overlap(mβ, β2, ρ, α; ν = .8)
 	b = (mβ - β2)/(β2 - mβ^2)*(1-mβ)
 	a = mβ/(1-mβ)*b
-	# probability that s < ρ for a given sweep
-	integrand(t) = ρ*exp(-ρ*t)*beta_inc(a, b, 1-exp(-K/α/t))[1]
-	return quadgk(t -> integrand(t), 0, 5/ρ, rtol=1e-5)[1]
+	B = Beta(a, b)
+
+	x0 = .02
+	s(β) = -α * log(1-β)
+	τ(β1, β2) = begin
+		t1 = 1/s(β1) * log(β1/x0 * ν/(1-ν))
+		t2 = 1/s(β2) * log(β2/x0 * (1-ν)/ν)
+		max(min(t1 - t2, 10/ρ), 0)
+	end
+
+	I1(β1) = quadgk(β2 -> pdf(B, β2)*(1-exp(-ρ*τ(β1, β2))), .001, .999, rtol=1e-5)[1]
+	return quadgk(β1 -> pdf(B, β1)*I1(β1), .001, .999, rtol=1e-5)[1]
 end
 
 # ╔═╡ 10987b07-70e0-4a19-9173-83cf487c08ff
@@ -78,7 +89,7 @@ dat = let
 		fraction_covered_by_sweeps(r.mβ, r.β2, r.ρ, r.α)
 	end
 	df.frac_overlap = map(eachrow(df)) do r
-		frac_overlap(r.mβ, r.β2, r.ρ, r.α)
+		frac_overlap(r.mβ, r.β2, r.ρ, r.α; ν=.75)
 	end
 	df.Tc_theory = map(r -> 1/r.ρ/r.β2, eachrow(df))
 	df.Tc_measured = map(eachrow(df)) do r
@@ -207,5 +218,6 @@ end
 # ╠═9ac16620-e45c-4218-9d7f-c7cca89e66e1
 # ╠═9ff2d96e-4637-4699-a4a2-47f4d9887fa5
 # ╠═c9a65c7c-2b3b-403a-9141-6bc9fb316512
+# ╠═858d5cba-f3d4-4213-9e5a-0060078b32b3
 # ╠═fae29d40-0bd5-43cb-ae2d-e264df34719e
 # ╠═83eb61b1-622b-4b1d-a1bf-3a7a0a750cb5
