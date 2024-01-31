@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.36
+# v0.19.37
 
 using Markdown
 using InteractiveUtils
@@ -50,9 +50,6 @@ data = data_ef;
 
 # ╔═╡ 2f8dc8a6-0a02-4983-8b14-0db6af50d37a
 data[data.α./data.s .== 3.0, :][1,:].pfix[2]
-
-# ╔═╡ 84a4010b-bd9f-4ca5-a77d-5274fc384cf1
-data.mβ
 
 # ╔═╡ 847f6080-fd36-4baa-b978-7835420ee0ae
 begin
@@ -136,7 +133,6 @@ estimate_pfix(.5, s0, .09)
 # ╠═edd312e5-ede5-4217-a9f1-f3038072da2d
 # ╠═0583c8d1-b309-4e11-b437-d7304338834f
 # ╠═2f8dc8a6-0a02-4983-8b14-0db6af50d37a
-# ╠═84a4010b-bd9f-4ca5-a77d-5274fc384cf1
 # ╠═3c06ee20-577e-4fbb-a061-478fc1250672
 # ╠═93261d1d-3674-4fca-a6b1-ee857e6b3705
 # ╠═e236a2ae-05c8-48d1-9ed0-d6a22e4e5884

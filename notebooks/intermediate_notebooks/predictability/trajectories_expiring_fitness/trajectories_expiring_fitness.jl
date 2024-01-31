@@ -36,7 +36,7 @@ mkpath(savedir)
 # ╔═╡ 0ed067a4-3780-432b-bd54-9d52a22f2bbf
 begin
     N = 50_000
-    L = 250
+    L = 400
     selected_sites = 1:L
     neutral_sites = 0:-1
     μ = 0
@@ -67,7 +67,7 @@ parameters = map(Iterators.product(αvals, ρvals)) do (α, ρ)
     mβ = s0 / (s0 + α)
     β2 = s0/(s0 + α) * 2*s0 / (2*s0 + α) # for exponential distribution of s at fixed α
     Ne = get_Ne(ρ, β2)
-    T = max(round(Int, 25*Ne), 100_000)
+    T = min(round(Int, 2_000*Ne), 1_000_000)
     Δt = 10
 	(α=α, ρ=ρ, mβ = mβ, β2 = β2, T = T, Δt = Δt)
 end |> x -> vcat(x...)
@@ -92,14 +92,15 @@ function simulate(
         # polymorphism = pop -> WF.diversity(
         #     pop; method = :polymorphism, positions = neutral_sites,
         # ),
-        # varpos_strict = pop -> WF.diversity(
-        #     pop; method = :variable_positions, variable=1/N, positions=selected_sites,
-        # ),
+        varpos_strict = pop -> WF.diversity(
+            pop; method = :variable_positions, variable=1/N, positions=selected_sites,
+        ),
         varpos_5 = pop -> WF.diversity(
             pop; method = :variable_positions, variable=.05, positions=selected_sites,
         ),
-        # n_genotypes = pop -> length(pop.genotypes),
+        n_genotypes = pop -> length(pop.genotypes),
     )
+
 
     β2 = s0/(s0 + α) * 2*s0 / (2*s0 + α)
     @info "Simulating for $T generations (Ne = $(get_Ne(ρ, β2)))"
@@ -118,6 +119,8 @@ function simulate(
         (
             t = x.t,
             varpos_5 = x.varpos_5,
+            varpos_strict = x.varpos_strict,
+            n_genotypes = x.n_genotypes,
         )
     end
 

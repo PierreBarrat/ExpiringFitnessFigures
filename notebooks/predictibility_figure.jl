@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.36
+# v0.19.37
 
 using Markdown
 using InteractiveUtils
@@ -170,7 +170,7 @@ plots_pfix = let
 end
 
 # ╔═╡ 0ce58257-c14e-4329-8f3a-df122d5d022f
-plots_pfix[1]
+plots_pfix[3]
 
 # ╔═╡ 73e7f564-c10b-4c48-91d2-8d44676042ed
 md"## Inertia plots"
@@ -204,7 +204,7 @@ plot_inertia = let
 		frame=:box,
 		title = "",
 		legend = (k == 1 ? :bottomright : false),
-		xlim = (-100, 5000),
+		xlim = (-100, 500),
 		ylim = (-0.01, 1.01),
 	)
 	
@@ -239,7 +239,7 @@ let
 		dpi = 300,
 	)
 
-	# savefig("../figures/panel_predictability.png")
+	savefig("../figures/panel_predictability.png")
 	# savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.png")
 	p
 end
