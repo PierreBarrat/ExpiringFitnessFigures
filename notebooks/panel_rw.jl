@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.36
+# v0.19.37
 
 using Markdown
 using InteractiveUtils
@@ -69,7 +69,7 @@ p_rw = let
 	plot(
 		p_rw; 
 		ylim = (-0.025, 1.025),
-		ann = (15, .92, ("D", 50)),
+		ann = (15, .92, ("C", 50)),
 	)
 end;
 
@@ -80,7 +80,7 @@ p_ode = let
 	p = expiring_selection_plot(; α, s0)
 	plot!(p.subplots[2], yticks = [0, s0])
 	plot!(p.subplots[1], ylabel="")
-	plot!(p, xlabel="", legendfontsize = 26, ann = (15, .85, ("C", 50)))
+	plot!(p, xlabel="", legendfontsize = 26, ann = (15, .85, ("D", 50)))
 	plot!(p, legend = :topright)
 end;
 
@@ -117,7 +117,7 @@ panel = let
 		grid(2,2)
 	]
 	plot(
-		p_freq, p_ode, p_pop_stack, p_rw; 
+		p_freq, p_rw, p_pop_stack, p_ode; 
 		layout=l, size = (2400, 1600), margin = 20mm, right_margin = 10mm, dpi=300,
 	)
 end
