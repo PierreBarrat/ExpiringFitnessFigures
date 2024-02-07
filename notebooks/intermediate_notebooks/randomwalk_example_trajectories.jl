@@ -15,23 +15,20 @@ macro bind(def, element)
 end
 
 # ╔═╡ 4c339e0c-98a8-11ed-06d4-6d227a4cfad5
-begin
-	using Revise
-	using Pkg; Pkg.activate("../ArticleFigures/")
-	using DiscreteRandomWalk1D
-	using FrequencyTrajectories
-	using Measures
-	using PlutoUI
-	using Plots
-	using StatsBase
-end
+# begin
+# 	using Revise
+# 	using Pkg; Pkg.activate("../ArticleFigures/")
+# 	using DiscreteRandomWalk1D
+# 	using FrequencyTrajectories
+# 	using Measures
+# 	using PlutoUI
+# 	using Plots
+# 	using StatsBase
+# end
 
-# ╔═╡ 1656f29a-b8d5-43a9-829e-799a43144a79
-simulate = @bind clicked Button("Simulate")
+function random_walk_example_plot(seed_val)
 
-# ╔═╡ e4780102-964f-4f19-bd1c-ff58811fdcce
-eval_include = @bind click2 CheckBox()
-
+Random.seed!(seed_val)
 # ╔═╡ 47b5c308-9ad6-49b5-871d-a71c000a2a77
 begin
 	x0 = .5
@@ -51,7 +48,6 @@ T = 3*Int(round(1/β/β/ρ)) # simulation time
 
 # ╔═╡ df7e5f19-9b40-478a-a86e-18257df25d81
 timevals, X = let 
-	clicked
 	X = Matrix{Float64}(undef, nreps, T+1)
 	timevals = nothing
 	for r in 1:nreps
@@ -62,66 +58,6 @@ timevals, X = let
 	timevals, X
 end
 
-# ╔═╡ 4b823bf4-c27c-4337-8e70-b8125c764e11
-save = @bind clicked_save CheckBox()
-
-# ╔═╡ ba170ee5-3fa4-45c5-a2bf-513c78a1c367
-let
-	sv = homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/"
-	clicked_save && savefig(sv * "example_random_walk.png")
-end
-
-# ╔═╡ 0a2f050b-fb7a-478c-8cda-e41f02cb03d3
-simulate
-
-# ╔═╡ e8bed50c-4a60-45cb-a229-7b4a9339c416
-md"## More repeats"
-
-# ╔═╡ 44ad1f71-667d-4bba-a48e-46bf7160c573
-timevals_long, X_long = let 
-	nreps = 1_00
-	T = 3*Int(round(1/β/β/ρ))
-	X = Matrix{Float64}(undef, nreps, T+1)
-	timevals = nothing
-	for r in 1:nreps
-		traj = RW.trajectory!(RW.EFRW(β; x=x0, ρ), T)
-		X[r, :] .= traj.x
-		timevals = traj.t
-	end
-	timevals, X
-end
-
-# ╔═╡ 6f5338c2-d64f-4e4e-97ce-8d3bee005814
-mean(X_long, dims=1)
-
-# ╔═╡ 85f077a3-70cd-42d8-97da-2dd5307c8201
-timevals_long
-
-# ╔═╡ c2051d10-5d95-4251-a62b-dc81b6fadd6d
-md"## Helper functions"
-
-# ╔═╡ ab29f9d5-4f99-4583-908a-d11b612bc9bd
-function final_state_color(x::AbstractVector)
-	return if x[end] > 0.95
-		:red
-	elseif x[end] < 0.05
-		:blue
-	else
-		:gray
-	end
-end
-
-# ╔═╡ 11958921-7425-4ec8-9a95-124171d69771
-let
-	p = plot()
-	for freq in eachrow(X_long)
-		color = final_state_color(freq)
-		plot!(timevals_long, freq; color, label="", alpha = .1, linewidth=1)
-	end
-
-	plot!(timevals_long, vec(mean(X_long, dims=1)), line=(4, :black), label="")
-	p
-end
 
 # ╔═╡ 55666413-027a-4b00-88bf-7bcc8299310a
 function flat_interp(X, times)
@@ -150,6 +86,10 @@ plt = let
 		plot!(tvals .+ dt[r], x, label="", linewidth=5)
 	end
 	p
+end
+
+return plt
+
 end
 
 # ╔═╡ Cell order:

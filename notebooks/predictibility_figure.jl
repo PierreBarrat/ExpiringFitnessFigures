@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.37
+# v0.19.38
 
 using Markdown
 using InteractiveUtils
@@ -44,7 +44,7 @@ end
 
 # ╔═╡ ae30fe90-9aaf-4ef6-add2-87ac34307c06
 begin
-	plt_defaults = pubfig(30)
+	plt_defaults = pubfig(24)
 	Plots.default(; plt_defaults...)
 end
 
@@ -186,6 +186,12 @@ data_inertia = let
 	)
 end;
 
+# ╔═╡ 1412b8a4-d92c-4c39-bf7f-a1ecf5f629dc
+ρvals = data_inertia.ρ |> sort |> unique
+
+# ╔═╡ 2a10e3e7-6ae5-461d-a8e9-4100b339b6a7
+
+
 # ╔═╡ 9b49e765-8b51-4b57-b80d-e9532ea6b964
 plot_inertia = let
 	αvals = data_inertia.α |> sort |> unique
@@ -263,4 +269,6 @@ end
 # ╠═0ce58257-c14e-4329-8f3a-df122d5d022f
 # ╟─73e7f564-c10b-4c48-91d2-8d44676042ed
 # ╠═0bd31d06-9430-470b-a49c-27b1e75c2f84
+# ╠═1412b8a4-d92c-4c39-bf7f-a1ecf5f629dc
+# ╠═2a10e3e7-6ae5-461d-a8e9-4100b339b6a7
 # ╠═9b49e765-8b51-4b57-b80d-e9532ea6b964

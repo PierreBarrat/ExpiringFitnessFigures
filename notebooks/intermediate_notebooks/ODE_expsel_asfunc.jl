@@ -5,71 +5,71 @@ using Markdown
 using InteractiveUtils
 
 function expiring_selection_plot(; α=.01, s0=.01)
-# ╔═╡ 3787989f-8504-475e-bfdc-c4af53197272
-# differential equation
-function expsel!(du,u,p,t)
-	du[1] = u[2] * u[1] * (1 - u[1])
-	du[2] = -p[1] * u[1] * u[2]
-end
+    # ╔═╡ 3787989f-8504-475e-bfdc-c4af53197272
+    # differential equation
+    function expsel!(du,u,p,t)
+    	du[1] = u[2] * u[1] * (1 - u[1])
+    	du[2] = -p[1] * u[1] * u[2]
+    end
 
-# ╔═╡ 659163e1-7cf7-48a3-a1d8-6f31e92161a6
-# α = 1e-2 # rate of fitness expiration
+    # ╔═╡ 659163e1-7cf7-48a3-a1d8-6f31e92161a6
+    # α = 1e-2 # rate of fitness expiration
 
-# ╔═╡ 5e6757f7-f517-4db8-9a73-975b07a6e136
-begin
-	x0 = 1e-2
-	# s0 = 1e-2
-	tspan = (0.0,12*1/s0)
-end
+    # ╔═╡ 5e6757f7-f517-4db8-9a73-975b07a6e136
+    begin
+    	x0 = 1e-2
+    	# s0 = 1e-2
+    	tspan = (0.0,12*1/s0)
+    end
 
-# ╔═╡ 0098e993-9376-4d84-bc28-c02cbadc31c3
-β = 1 - exp(-s0/α) # expected final frequency
+    # ╔═╡ 0098e993-9376-4d84-bc28-c02cbadc31c3
+    β = 1 - exp(-s0/α) # expected final frequency
 
-# ╔═╡ d7075ee6-90e4-4e10-a146-075e685b7991
-sol = let
-	u0 = [x0, s0]
-	params = [α]
-	prob = ODEProblem(expsel!, u0, tspan, params)
-	solve(prob)
-end;
+    # ╔═╡ d7075ee6-90e4-4e10-a146-075e685b7991
+    sol = let
+    	u0 = [x0, s0]
+    	params = [α]
+    	prob = ODEProblem(expsel!, u0, tspan, params)
+    	solve(prob)
+    end;
 
-# ╔═╡ 09c7b35a-763a-4f2a-8713-f8c45051cacb
-p = let p = plot()
-	## Left-axis : frequency of variant
-	tvals = range(tspan..., length=100)
-	plot!(tvals, [sol(t)[1] for t in tvals], color=1, label="frequency")
-	hline!([β], line=(:black, 6, .25), label="")
+    # ╔═╡ 09c7b35a-763a-4f2a-8713-f8c45051cacb
+    p = let p = plot()
+    	## Left-axis : frequency of variant
+    	tvals = range(tspan..., length=100)
+    	plot!(tvals, [sol(t)[1] for t in tvals], color=1, label="frequency")
+    	hline!([β], line=(:black, 6, .25), label="")
 
-    # selective sweep
-    plot!(
-        tvals, map(t -> exp(s0*t) / (1/x0 - 1 + exp(s0*t)), tvals);
-        line = (:black, :dashdot, 2), label="",
-    )
+        # selective sweep
+        plot!(
+            tvals, map(t -> exp(s0*t) / (1/x0 - 1 + exp(s0*t)), tvals);
+            line = (:black, :dashdot, 2), label="",
+        )
 
-	# plot invisible data on the left axis for the label of the fitness curve
-	# otherwise, labels stack
-	plot!([-1, -2], [-1, -2], line = (:red, :dash), label = "fitness")
+    	# plot invisible data on the left axis for the label of the fitness curve
+    	# otherwise, labels stack
+    	plot!([-1, -2], [-1, -2], line = (:red, :dash), label = "fitness")
 
-	plot!(
-		xlabel = "time", 
-		ylabel="Variant frequency",
-		ylim = (0,1),
-		xlim = tspan,
-	)
-	
-	## Right-axis: fitness of variant
-	axis2 = twinx()
-	plot!(
-		axis2, tvals, [sol(t)[2] for t in tvals]; 
-		label="", ylabel = "variant fitness", line = (:red, :dash)
-	)
-	# hline!(axis2, [s0], line = (:black, :dash), label="")
-	# plot!(axis2, yticks = [0, s0], right_margin = 10mm)
-	
-	p
-end
+    	plot!(
+    		xlabel = "",
+    		ylabel="Variant frequency",
+    		ylim = (0,1),
+    		xlim = tspan,
+    	)
 
-return p
+    	## Right-axis: fitness of variant
+    	axis2 = twinx()
+    	plot!(
+    		axis2, tvals, [sol(t)[2] for t in tvals];
+    		xlabel = "", label="", ylabel = "variant fitness", line = (:red, :dash)
+    	)
+    	# hline!(axis2, [s0], line = (:black, :dash), label="")
+    	# plot!(axis2, yticks = [0, s0], right_margin = 10mm)
+
+    	p
+    end
+
+    return p
 
 end
 

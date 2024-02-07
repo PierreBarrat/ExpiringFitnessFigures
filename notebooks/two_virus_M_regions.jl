@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.37
+# v0.19.38
 
 using Markdown
 using InteractiveUtils
@@ -66,7 +66,7 @@ end
 
 # ╔═╡ f905453d-2b68-40fd-9950-a7165933e73f
 begin
-	plt_defaults = pubfig(30)
+	plt_defaults = pubfig(24)
 	Plots.default(; plt_defaults...)
 end
 
@@ -87,9 +87,6 @@ Ms = let
 	_Ms = @bind M Slider([1,2,3,4,5,10,20], show_value=true, default=10)
 	md"M = $(_Ms)"
 end
-
-# ╔═╡ e38f872f-f9ec-45cf-953c-42a18aa0bab3
-@unpack α, γ, δ = params_one;
 
 # ╔═╡ 943ee06f-d4e2-40fe-9764-6c0a0b7ef0b0
 I0 = 1e-4 # initial level of the variant
@@ -179,15 +176,6 @@ md"## Frequency"
 # ╔═╡ d1910dd1-3e5e-4d1c-92cb-529b9a00c356
 default(:fontfamily)
 
-# ╔═╡ d2b8e952-37e1-4332-a321-706bd589a62d
-begin
-	Seq_special = δ/(δ + f_special*(α-δ))
-	Seq_other = δ/(δ + x*(α-δ))
-
-	growth_rate_one = α*Seq_special - δ
-	growth_rate_many = α*((1-1/M)*Seq_other + Seq_special/M) - δ
-end
-
 # ╔═╡ 8f365998-cb7e-4000-a5c5-516a2b1ac814
 function logistic_growth(tvals, s, x0)
 	return map(tvals) do t
@@ -232,6 +220,18 @@ params_one, params_many, params_many_varC = let
 	)
 end;
 
+# ╔═╡ e38f872f-f9ec-45cf-953c-42a18aa0bab3
+@unpack α, γ, δ = params_one;
+
+# ╔═╡ d2b8e952-37e1-4332-a321-706bd589a62d
+begin
+	Seq_special = δ/(δ + f_special*(α-δ))
+	Seq_other = δ/(δ + x*(α-δ))
+
+	growth_rate_one = α*Seq_special - δ
+	growth_rate_many = α*((1-1/M)*Seq_other + Seq_special/M) - δ
+end
+
 # ╔═╡ c2a159f4-cd25-4525-a270-2b3065a0dc0e
 T = 5/params_one.γ # simulation time
 
@@ -261,7 +261,7 @@ p_freq_many = let
 
 	p = plot(
 		legend = :bottomright,
-		xlabel = "Time",
+		xlabel = "",
 		ylabel = "",
 		ylim = (-0.01, 1.01),
 	)
@@ -292,7 +292,7 @@ pI_many = let
 	
 	p = plot(
 		# title="Infectious (all groups)", 
-		xlabel="Time",
+		xlabel="",
 		legend=:topright,
 		frame=:box,
 		yscale = :log10, 
@@ -314,7 +314,7 @@ pS_many = let
 	
 	p = plot(
 		# title="Infectious (all groups)", 
-		xlabel="Time",
+		xlabel="",
 		legend=:topright,
 		frame=:box,
 		# yscale = :log10, 

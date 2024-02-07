@@ -1,18 +1,8 @@
 ### A Pluto.jl notebook ###
-# v0.19.36
+# v0.19.38
 
 using Markdown
 using InteractiveUtils
-
-# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
-macro bind(def, element)
-    quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
-        local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
-        el
-    end
-end
 
 # ╔═╡ 4c339e0c-98a8-11ed-06d4-6d227a4cfad5
 # begin
@@ -29,6 +19,7 @@ end
 function random_walk_example_plot(seed_val)
 
 Random.seed!(seed_val)
+
 # ╔═╡ 47b5c308-9ad6-49b5-871d-a71c000a2a77
 begin
 	x0 = .5
@@ -59,21 +50,6 @@ timevals, X = let
 end
 
 
-# ╔═╡ 55666413-027a-4b00-88bf-7bcc8299310a
-function flat_interp(X, times)
-	real_times = 0:length(X)
-	X_interp = similar(times)
-	
-	pos = 1
-	for (i,t) in enumerate(times)
-		if t > real_times[pos+1]
-			pos += 1
-		end
-		X_interp[i] = X[pos]
-	end
-	X_interp
-end
-
 # ╔═╡ 94226348-3a21-4aa8-9b7b-61c4922c17be
 plt = let
 	p = plot(
@@ -92,23 +68,26 @@ return plt
 
 end
 
+# ╔═╡ 55666413-027a-4b00-88bf-7bcc8299310a
+function flat_interp(X, times)
+	real_times = 0:length(X)
+	X_interp = similar(times)
+
+	pos = 1
+	for (i,t) in enumerate(times)
+		if t > real_times[pos+1]
+			pos += 1
+		end
+		X_interp[i] = X[pos]
+	end
+	X_interp
+end
+
 # ╔═╡ Cell order:
 # ╠═4c339e0c-98a8-11ed-06d4-6d227a4cfad5
-# ╠═1656f29a-b8d5-43a9-829e-799a43144a79
-# ╠═e4780102-964f-4f19-bd1c-ff58811fdcce
 # ╠═47b5c308-9ad6-49b5-871d-a71c000a2a77
 # ╠═6aebac0f-1ee0-43c8-881f-10bf8eb7c5d3
 # ╠═2a34c468-3c82-4290-a490-304a2169106c
 # ╠═df7e5f19-9b40-478a-a86e-18257df25d81
 # ╠═94226348-3a21-4aa8-9b7b-61c4922c17be
-# ╠═4b823bf4-c27c-4337-8e70-b8125c764e11
-# ╠═ba170ee5-3fa4-45c5-a2bf-513c78a1c367
-# ╠═0a2f050b-fb7a-478c-8cda-e41f02cb03d3
-# ╠═e8bed50c-4a60-45cb-a229-7b4a9339c416
-# ╠═44ad1f71-667d-4bba-a48e-46bf7160c573
-# ╠═11958921-7425-4ec8-9a95-124171d69771
-# ╠═6f5338c2-d64f-4e4e-97ce-8d3bee005814
-# ╠═85f077a3-70cd-42d8-97da-2dd5307c8201
-# ╠═c2051d10-5d95-4251-a62b-dc81b6fadd6d
-# ╠═ab29f9d5-4f99-4583-908a-d11b612bc9bd
 # ╠═55666413-027a-4b00-88bf-7bcc8299310a

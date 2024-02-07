@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.37
+# v0.19.38
 
 using Markdown
 using InteractiveUtils
@@ -57,7 +57,7 @@ end
 
 # ╔═╡ e3a280fe-889a-40de-aeb8-8a9e61636a18
 begin
-	plt_defaults = pubfig(20)
+	plt_defaults = pubfig(24)
 	Plots.default(; plt_defaults...)
 end
 
@@ -70,6 +70,7 @@ p_rw = let
 		p_rw; 
 		ylim = (-0.025, 1.025),
 		ann = (15, .92, ("C", 50)),
+		xlabel="",
 	)
 end;
 
@@ -79,8 +80,8 @@ p_ode = let
 	s0 = 0.05
 	p = expiring_selection_plot(; α, s0)
 	plot!(p.subplots[2], yticks = [0, s0])
-	plot!(p.subplots[1], ylabel="")
-	plot!(p, xlabel="", legendfontsize = 26, ann = (15, .85, ("D", 50)))
+	plot!(p.subplots[1], ylabel="", xlabel = "Time")
+	plot!(p, legendfontsize = 26, ann = (15, .85, ("D", 50)))
 	plot!(p, legend = :topright)
 end;
 
