@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.38
+# v0.19.40
 
 using Markdown
 using InteractiveUtils
@@ -183,6 +183,14 @@ let
 	p
 end
 
+# ╔═╡ 92236372-30fd-4cdd-aaa9-b95592b89708
+let
+	inertia_sc2 = inertia_one(
+		dat_sc2; sc2=true, fbin = .2, xlim=(-60, 160)
+	)
+	savefig("../figures/sc2_av_traj.png")
+end
+
 # ╔═╡ 8a278d21-4647-45bc-a993-e2e64ebf2c53
 inertia_one(dat_h3n2; sc2=false)
 
@@ -209,7 +217,7 @@ StatsBase = "~0.34.2"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.0"
+julia_version = "1.10.1"
 manifest_format = "2.0"
 project_hash = "7bd64217d8d4c79009d86a152deee1679bc1b942"
 
@@ -294,7 +302,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.0.5+1"
+version = "1.1.0+0"
 
 [[deps.ConcurrentUtilities]]
 deps = ["Serialization", "Sockets"]
@@ -705,7 +713,7 @@ version = "1.3.5+1"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
-version = "0.3.23+2"
+version = "0.3.23+4"
 
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1293,6 +1301,7 @@ version = "1.4.1+1"
 # ╠═262b3a8e-db22-47a3-a5db-7402afdfe3bb
 # ╠═b2a21e7d-e71f-4c7a-86fc-727a859f0f60
 # ╠═393ea0ec-71bf-4eac-a35c-ba16b4142170
+# ╠═92236372-30fd-4cdd-aaa9-b95592b89708
 # ╠═78877764-a8c9-451a-be84-7b9cd4425e8e
 # ╠═5c03a779-9493-4e63-84bc-7f6bcf510b0d
 # ╠═23c417e5-a587-4c69-a747-8d390bd140cc

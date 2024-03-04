@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.38
+# v0.19.40
 
 using Markdown
 using InteractiveUtils
@@ -233,7 +233,10 @@ begin
 end
 
 # ╔═╡ c2a159f4-cd25-4525-a270-2b3065a0dc0e
-T = 5/params_one.γ # simulation time
+begin
+	T = 5/params_one.γ # simulation time
+	tvals = range(0, T; length=100)
+end
 
 # ╔═╡ fd0d5424-074d-4fee-a41c-a80e61591348
 state_init_many, sol_init_many, sol_many = let
@@ -274,8 +277,10 @@ p_freq_many = let
 	annotate!(T*.15, .17, ("M=$M immune groups", 30, :left,  "Helvetica Bold"))
 	annotate!(T*.15, .07, ("Fast mixing", 30, :left, "Helvetica Bold"))
 	# plot logistic growth for comparison
-	plot!(tvals, logistic_growth(
-		tvals, growth_rate_many, f_R[1]);
+	tvals_pos = filter(>=(0), tvals)
+	idx_t0 = findfirst(>=(0), tvals)
+	plot!(tvals_pos, logistic_growth(
+		tvals_pos, growth_rate_many, f_R[idx_t0]);
 		label = "", line=(:black, :dash, 2),
 	)
 	
@@ -285,10 +290,13 @@ end
 # ╔═╡ 2f8e4f1f-2da0-4bfa-b63c-069082180b6d
 pI_many = let
 	g = :I
-	tvals = range(0, T, length=400)
 	
-	X_wt = map(t -> mean(sol_many[t, 1:M, 1, g]), tvals)
-	X_m = map(t -> mean(sol_many[t, 1:M, 2, g]), tvals)
+	X_wt = map(tvals) do t
+		mean(t >= 0 ? sol_many[t, 1:M, 1, g] : sol_init_many[T+t, 1:M, 1, g])
+	end
+	X_m = map(tvals) do t
+		mean(t >= 0 ? sol_many[t, 1:M, 2, g] : sol_init_many[T+t, 1:M, 2, g])
+	end
 	
 	p = plot(
 		# title="Infectious (all groups)", 
@@ -307,10 +315,13 @@ end
 # ╔═╡ 882379b0-76c3-4d74-b1f3-167f5c3c6900
 pS_many = let
 	g = :S
-	tvals = range(0, T, length=400)
 	
-	X_wt = map(t -> mean(sol_many[t, 1:M, 1, g]), tvals)
-	X_m = map(t -> mean(sol_many[t, 1:M, 2, g]), tvals)
+	X_wt = map(tvals) do t
+		mean(t >= 0 ? sol_many[t, 1:M, 1, g] : sol_init_many[T+t, 1:M, 1, g])
+	end
+	X_m = map(tvals) do t
+		mean(t >= 0 ? sol_many[t, 1:M, 2, g] : sol_init_many[T+t, 1:M, 2, g])
+	end
 	
 	p = plot(
 		# title="Infectious (all groups)", 
@@ -325,6 +336,22 @@ pS_many = let
 	hline!([δ/α], line = (10, .6, :gray), label="")
 	annotate!(0.92*T, δ/α / 1.06, ("δ/α", 40))
 	p
+end
+
+# ╔═╡ 775484c6-f37a-471e-80db-c1fdc80015db
+let
+	p1 = plot(pI_many, title = "Infectious")
+	p2 = plot(pS_many, title = "Susceptibles")
+	p3 = plot(p_freq_many, title = "Variant frequency")
+	
+	p_one = plot(
+		p1, p2, p3; 
+		layout=grid(1,3), 
+		size = (2400, 660), 
+		bottom_margin = 10mm, 
+		right_margin = 10mm,
+	)
+	savefig("../figures/variant_invasion_SIR_manygroups_fastmix.png")
 end
 
 # ╔═╡ e6497af1-d7cf-4ad9-8b17-ef12b0853488
@@ -367,11 +394,14 @@ end
 
 # ╔═╡ feb7c4cd-d7b7-413b-8300-8c86283731ca
 pI_many_varC = let
-	g = :I
-	tvals = range(0, T, length=400)
-	
-	X_wt = map(t -> mean(sol_many_varC[t, 1:M, 1, g]), tvals)
-	X_m = map(t -> mean(sol_many_varC[t, 1:M, 2, g]), tvals)
+	g = :I	
+
+	X_wt = map(tvals) do t
+		mean(t>=0 ? sol_many_varC[t, 1:M, 1, g] : sol_init_many_varC[T+t, 1:M, 1, g])
+	end
+	X_m = map(tvals) do t
+		mean(t>=0 ? sol_many_varC[t, 1:M, 2, g] : sol_init_many_varC[T+t, 1:M, 2, g])
+	end
 	
 	p = plot(
 		# title="Infectious (all groups)", 
@@ -390,10 +420,13 @@ end
 # ╔═╡ d7832f42-eb72-4483-9874-002af03f8773
 pS_many_varC = let
 	g = :S
-	tvals = range(0, T, length=400)
-	
-	X_wt = map(t -> mean(sol_many_varC[t, 1:M, 1, g]), tvals)
-	X_m = map(t -> mean(sol_many_varC[t, 1:M, 2, g]), tvals)
+
+	X_wt = map(tvals) do t
+		mean(t>=0 ? sol_many_varC[t, 1:M, 1, g] : sol_init_many_varC[T+t, 1:M, 1, g])
+	end
+	X_m = map(tvals) do t
+		mean(t>=0 ? sol_many_varC[t, 1:M, 2, g] : sol_init_many_varC[T+t, 1:M, 2, g])
+	end
 	
 	p = plot(
 		# title="Infectious (all groups)", 
@@ -454,10 +487,13 @@ end
 # ╔═╡ 1d6ff2eb-92dd-4588-ba4c-6114231c8ef4
 pI_one = let
 	g = :I
-	tvals = range(0, T, length=400)
 	
-	X_wt = map(t -> sol_one[t, 1, 1, g], tvals)
-	X_m = map(t -> sol_one[t, 1, 2, g], tvals)
+	X_wt = map(tvals) do t
+		t >= 0 ? sol_one[t, 1, 1, g] : sol_init_one[T+t, 1, 1, g]
+	end
+	X_m = map(tvals) do t
+		t >= 0 ? sol_one[t, 1, 2, g] : sol_init_one[T+t, 1, 2, g]
+	end
 	
 	p = plot(
 		title="Infectious", 
@@ -476,10 +512,9 @@ end
 # ╔═╡ 74daa07e-62f3-4937-af99-a726933bd647
 pS_one = let
 	g = :S
-	tvals = range(0, T, length=400)
 	
-	X_wt = map(t -> sol_one[t, 1, 1, g], tvals)
-	X_m = map(t -> sol_one[t, 1, 2, g], tvals)
+	X_wt = map(t -> t >= 0 ? sol_one[t, 1, 1, g] : sol_init_one[T+t, 1, 1, g], tvals)
+	X_m = map(t -> t >= 0 ? sol_one[t, 1, 2, g] : sol_init_one[T+t, 1, 2, g], tvals)
 	
 	p = plot(
 		title="Susceptibles", 
@@ -487,7 +522,7 @@ pS_one = let
 		legend=:topright,
 		frame=:box,
 		# yscale = :log10, 
-		ylim = S_yrange,
+		# ylim = S_yrange,
 	)
 	plot!(tvals, X_wt, label="Wild type")
 	plot!(tvals, X_m, label="Variant")
@@ -514,6 +549,18 @@ let
 		"Documents/BaleLabo/Notes/ExpiringFitness/figures/variant_invasion_SIR.png"
 	))
 	panel
+end
+
+# ╔═╡ b7add337-7f92-4739-a71c-9ba7c17943ca
+let
+	p_one = plot(
+		pI_one, pS_one, p_freq_one; 
+		layout=grid(1,3), 
+		size = (2400, 660), 
+		bottom_margin = 10mm, 
+		right_margin = 10mm,
+	)
+	savefig("../figures/variant_invasion_SIR_onegroup.png")
 end
 
 # ╔═╡ 6d415fbc-b605-4a7c-b17f-db6480373e70
@@ -553,7 +600,9 @@ Cs
 # ╠═29fa649f-7400-4099-8163-75a3d12362c9
 # ╟─6c3a3b73-34b2-4643-9170-ed644e363725
 # ╠═6d415fbc-b605-4a7c-b17f-db6480373e70
-# ╟─dd51a9d9-7817-49d1-ae94-c69f4aac1c47
+# ╠═dd51a9d9-7817-49d1-ae94-c69f4aac1c47
+# ╠═b7add337-7f92-4739-a71c-9ba7c17943ca
+# ╠═775484c6-f37a-471e-80db-c1fdc80015db
 # ╟─d65daa41-6477-4eef-8193-364ee4cc21f6
 # ╠═cd5131c3-2a6f-46e9-9cdc-193573e516f8
 # ╠═d1910dd1-3e5e-4d1c-92cb-529b9a00c356
@@ -567,8 +616,8 @@ Cs
 # ╟─feb7c4cd-d7b7-413b-8300-8c86283731ca
 # ╟─d4d20d93-d54b-4fb8-a334-dde0a6ef5684
 # ╠═cad2211c-3f9f-43e7-8098-17c07dc4c12f
-# ╠═74daa07e-62f3-4937-af99-a726933bd647
-# ╠═882379b0-76c3-4d74-b1f3-167f5c3c6900
+# ╟─74daa07e-62f3-4937-af99-a726933bd647
+# ╟─882379b0-76c3-4d74-b1f3-167f5c3c6900
 # ╟─d7832f42-eb72-4483-9874-002af03f8773
 # ╟─4640dbe6-89b5-4590-ac21-914226ca2097
 # ╠═c79fe879-a32a-4391-8df1-5b9d9eeb75f5
