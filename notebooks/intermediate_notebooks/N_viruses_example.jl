@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.36
+# v0.19.41
 
 using Markdown
 using InteractiveUtils
@@ -17,7 +17,7 @@ end
 # ╔═╡ a16382a0-8b7b-11ed-050f-b512c0949dd0
 begin
 	using Revise
-	using Pkg; Pkg.activate("../")
+	using Pkg; Pkg.activate("../../")
 	using Chain
 	using Distributions
 	using Measures
@@ -50,10 +50,10 @@ seed_picker = @bind val NumberField(1:100_000)
 params = let
 	Random.seed!(val)
 	clicked
-	N = 7
+	N = 4
 	M = 10
 	α = 3
-	γ = .01
+	γ = .05
 	c = 1/M
 	PSS.Parameters(; N, M, α, γ, c)
 end;
@@ -61,12 +61,15 @@ end;
 # ╔═╡ 3279b428-b03e-48e5-97e8-06f8f8e4d80f
 I0 = 1e-5 # initial value of each new mutant
 
+# ╔═╡ 771392f7-035c-467a-80cc-10b469fc7422
+
+
 # ╔═╡ 528bfbbe-0102-447d-a9fd-5e1f17e55238
 @unpack α, γ, δ, N, M = params;
 
 # ╔═╡ 30f888a7-d3f4-4089-9c1e-c39ada15444a
 begin
-	local teq = 8/γ
+	local teq = 15/γ
 	Random.seed!(val)
 	itimes = @chain begin
 		# rand(Exponential(Δt), N-1)
@@ -75,15 +78,15 @@ begin
 		_ .- teq # first introduction at 0
 		pushfirst!(_, -5*teq) # wt starts equilibrated
 	end
-	itimes[end] += teq # longer simulation for the last strain
+	itimes[end] += 3*teq # longer simulation for the last strain
 	"Times at which each new strain is introduced: $(itimes)"
 end
 
 # ╔═╡ e34bdc45-3bb1-4628-8e55-c40d54d4159a
 K = let
 	Random.seed!(val)
-	f_dist = Uniform(.3, .7)
-	b_dist = Uniform(.3, .7)
+	f_dist = Uniform(.3, .6)
+	b_dist = Uniform(.5, .8)
 	backward = rand(b_dist, params.N)
 	forward = rand(f_dist, params.N)
 	PSS.cross_immunity(backward, forward)
@@ -359,6 +362,7 @@ end
 # ╠═629df600-203e-4456-b1f0-1479af1a4199
 # ╠═3279b428-b03e-48e5-97e8-06f8f8e4d80f
 # ╠═30f888a7-d3f4-4089-9c1e-c39ada15444a
+# ╠═771392f7-035c-467a-80cc-10b469fc7422
 # ╠═528bfbbe-0102-447d-a9fd-5e1f17e55238
 # ╠═e34bdc45-3bb1-4628-8e55-c40d54d4159a
 # ╠═b761969b-8fc1-4772-aeaf-f61c6525fcdc

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.41
 
 using Markdown
 using InteractiveUtils
@@ -127,7 +127,7 @@ else
 end
 
 # ╔═╡ bec3aa74-7a61-4e59-bf59-38046b572118
-function inertia_one(dat; fbin = 0.4, sc2=false, kwargs...)
+function inertia_one(dat; fbin = 0.4, sc2=false, write_ann=true, kwargs...)
 	tvals = if !sc2
 		dat["time_points"]
 	else
@@ -160,7 +160,7 @@ function inertia_one(dat; fbin = 0.4, sc2=false, kwargs...)
 	# 	[x_arr, x_arr], [fbin, fbin+.1]; 
 	# 	line=(3, :black), label="",  arrow = arrow(:both, .1, .2),
 	# )
-	annotate!(x_ann, fbin+0.05, text(L"x^\star", 36))
+	write_ann && annotate!(x_ann, fbin+0.05, text(L"x^\star", 36))
 	
 	# plot!([tvals[1], 0], [fbin-.05, fbin-0.05], line=(:black, .5), label="")
 	p
@@ -192,7 +192,21 @@ let
 end
 
 # ╔═╡ 8a278d21-4647-45bc-a993-e2e64ebf2c53
-inertia_one(dat_h3n2; sc2=false)
+let
+	fbin = .4
+	p = inertia_one(dat_h3n2; fbin, sc2=false, write_ann=false)
+	plot!(
+		xlabel = "Temps",
+		ylabel = "Occurence",
+		labelfontsize = 30,
+		size = (1400, 900),
+		margin = 7mm
+	)
+	(x_arr, x_ann) = (-320, -230)
+	annotate!(x_ann, fbin+0.05, text(L"f_0^\star", 30))
+	savefig(p, joinpath(homedir(), "Bureau/h3n2_ha_inertia.png"))
+	p
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -217,7 +231,7 @@ StatsBase = "~0.34.2"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.1"
+julia_version = "1.10.3"
 manifest_format = "2.0"
 project_hash = "7bd64217d8d4c79009d86a152deee1679bc1b942"
 
@@ -302,7 +316,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.0+0"
+version = "1.1.1+0"
 
 [[deps.ConcurrentUtilities]]
 deps = ["Serialization", "Sockets"]
