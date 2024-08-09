@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.45
 
 using Markdown
 using InteractiveUtils
@@ -261,6 +261,7 @@ p_freq_many = let
 	f_R1 = PSS.frequency(sol_many, tvals, 1, 2)
 	# f_R2 = PSS.frequency(sol, tvals, 2, 2)
 	f_R = PSS.frequency(sol_many, tvals, 2)
+	@info "Initial frequency" f_R[1]
 
 	p = plot(
 		legend = :bottomright,
@@ -461,7 +462,8 @@ p_freq_one = let
 	# freq. plot
 	tvals = range(0, T, length=100)
 	f_R = PSS.frequency(sol_one, tvals, 2)
-
+	@info "Initial frequency" f_R[1]
+	
 	p = plot(
 		legend = :bottomright,
 		# xlabel = "Time",

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.43
+# v0.19.45
 
 using Markdown
 using InteractiveUtils
@@ -79,7 +79,7 @@ plot_Tc = let
 		# ylabel = L"T_{MRCA}",
 		ylabel = "coalescence time",
 		frame=:box,
-		# colorbar_title = ("Probability of overlap", 30),
+		colorbar_title = text("Probability of overlap", 24),
 		size = (1200, 800),
 		right_margin = 20mm,
 		# colorbar=false,
@@ -246,7 +246,7 @@ let
 	)
 
 	savefig("../figures/panel_predictability.png")
-	# savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.png")
+	savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.png")
 	p
 end
 
