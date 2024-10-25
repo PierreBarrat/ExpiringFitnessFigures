@@ -181,12 +181,12 @@ let
 	savefig("../figures/panel_h3n2_sc2.png")
 	savefig(joinpath(
 		homedir(), 
-		"/Documents/BaleLabo/Notes/ExpiringFitness/figures/", 
+		"Documents/BaleLabo/Notes/ExpiringFitness/figures/", 
 		"panel_h3n2_sc2.png"
 	))
 	savefig(joinpath(
 		homedir(), 
-		"/Documents/BaleLabo/Notes/ExpiringFitness/figures/", 
+		"Documents/BaleLabo/Notes/ExpiringFitness/figures/", 
 		"panel_h3n2_sc2.pdf"
 	))
 	p
