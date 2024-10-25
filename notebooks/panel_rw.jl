@@ -132,6 +132,21 @@ begin
 		homedir(), "Documents/BaleLabo/Notes/ExpiringFitness/figures/"
 	)
 	savefig(panel, joinpath(article_figures, "expfit_randomwalk_panel.png"))
+	
+end
+
+# ╔═╡ 942a8362-155b-4add-8b10-3299feb328c2
+let
+	# saving to pdf
+	l = @layout [
+		grid(2,2)
+	]
+	panel = plot(
+		p_freq, p_rw, p_pop_stack, p_ode; 
+		layout=l, size = (2400, 1600), margin = 20mm, right_margin = 10mm, dpi=300,
+	)
+	plot!(panel, gridalpha=0.05)
+	savefig(panel, "../figures/expfit_randomwalk_panel.pdf")
 	savefig(panel, joinpath(article_figures, "expfit_randomwalk_panel.pdf"))
 end
 
@@ -149,4 +164,5 @@ filler = plot(rand(10), title="FILLER");
 # ╠═514cd78e-bc5d-4a31-ba96-66c7477098c7
 # ╠═8cf42471-7ed4-475b-a5d9-1b23b3912bdb
 # ╠═38c5b59c-23a8-4344-9b78-90a740480c69
+# ╠═942a8362-155b-4add-8b10-3299feb328c2
 # ╠═f94e0d7d-e3e8-4810-85ac-6f391488acb3

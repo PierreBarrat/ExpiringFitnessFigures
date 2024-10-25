@@ -105,7 +105,7 @@ function inertia_many(dat; sc2=false, kwargs...)
 		Tmean = mean(values(dat["trajectories"][fbin]))
 		fbin = parse(Float64, fbin)
 		plot!(tvals, Tmean, label="", color = pal[i])
-		plot!([0, tvals[end]], [fbin+.05, fbin+.05], line=(:black, .25), label="")
+		plot!([0, tvals[end]], [fbin+.05, fbin+.05], line=(:black, .4), label="")
 	end
 
 	p
@@ -177,13 +177,17 @@ let
 		layout = grid(2,2),
 		dpi = 300,
 		margin=15mm,
+		thickness_scaling = 1,
 	)
-	savefig("../figures/panel_h3n2_sc2.png")
+	savefig(p, "../figures/panel_h3n2_sc2.png")
 	savefig(joinpath(
 		homedir(), 
 		"Documents/BaleLabo/Notes/ExpiringFitness/figures/", 
 		"panel_h3n2_sc2.png"
 	))
+	
+	plot!(p, gridalpha=0.05)
+	savefig(p, "../figures/panel_h3n2_sc2.pdf")
 	savefig(joinpath(
 		homedir(), 
 		"Documents/BaleLabo/Notes/ExpiringFitness/figures/", 

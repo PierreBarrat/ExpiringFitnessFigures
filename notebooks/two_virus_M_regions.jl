@@ -550,11 +550,29 @@ let
 		homedir(), 
 		"Documents/BaleLabo/Notes/ExpiringFitness/figures/variant_invasion_SIR.png"
 	))
+	panel
+end
+
+# ╔═╡ eaf6101a-2557-404e-920b-66aa3afb04c6
+let
+	# saving to pdf
+	panel = plot(
+		pI_one, pS_one, p_freq_one, 
+		pI_many, pS_many, p_freq_many,
+		pI_many_varC, pS_many_varC, p_freq_many_varC,;
+		layout = grid(3, 3),
+		size = (2400, 2000),
+		bottom_margin = 10mm, 
+		right_margin = 10mm,
+		dpi = 300, 
+	)
+	plot!(panel, gridalpha=0.05)
+	
+	savefig("../figures/variant_invasion_SIR.pdf")
 	savefig(joinpath(
 		homedir(), 
 		"Documents/BaleLabo/Notes/ExpiringFitness/figures/variant_invasion_SIR.pdf"
 	))
-	panel
 end
 
 # ╔═╡ b7add337-7f92-4739-a71c-9ba7c17943ca
@@ -607,6 +625,7 @@ Cs
 # ╟─6c3a3b73-34b2-4643-9170-ed644e363725
 # ╠═6d415fbc-b605-4a7c-b17f-db6480373e70
 # ╠═dd51a9d9-7817-49d1-ae94-c69f4aac1c47
+# ╠═eaf6101a-2557-404e-920b-66aa3afb04c6
 # ╠═b7add337-7f92-4739-a71c-9ba7c17943ca
 # ╠═775484c6-f37a-471e-80db-c1fdc80015db
 # ╟─d65daa41-6477-4eef-8193-364ee4cc21f6

@@ -51,6 +51,9 @@ end
 # ╔═╡ edcaa2dc-3715-4d0d-a87d-16595b3064fa
 md"# Panel"
 
+# ╔═╡ 59ad6a60-464f-4eea-bb2e-bbffcee5835b
+ [:none, :auto, :circle, :rect, :star5, :diamond, :hexagon, :cross, :xcross, :utriangle, :dtriangle, :rtriangle, :ltriangle, :pentagon, :heptagon, :octagon, :star4, :star6, :star7, :star8, :vline, :hline, :+, :x]
+
 # ╔═╡ 916855f7-0a6e-4864-ad74-52c3980fa3f3
 pwd()
 
@@ -138,7 +141,7 @@ data_pfix = let
 end;
 
 # ╔═╡ 795db63d-5612-44ea-9fb9-87abbf99ab69
-plots_pfix = let
+function make_plots_pfix(; marker=(:cross, 12))	
 	αvals = data_pfix.α |> sort |> unique
 	ρvals = data_pfix.ρ |> sort |> unique
 	s0 = data_pfix.s[1]
@@ -159,7 +162,7 @@ plots_pfix = let
 			plot!(
 				p, r.f, r.pfix;
 				label="ν/s=$(round(r.α/r.s; sigdigits=2))", 
-				marker=(:cross, 12),
+				marker,
 				linewidth = 5,
 				color = pal[i],
 			)
@@ -168,6 +171,9 @@ plots_pfix = let
 		plot!([0,1], [0,1], line=(:black, :dash), label="")
 	end
 end
+
+# ╔═╡ a9bf4053-66b5-4451-b461-a3814e200534
+plots_pfix = make_plots_pfix()
 
 # ╔═╡ 0ce58257-c14e-4329-8f3a-df122d5d022f
 plots_pfix[3]
@@ -236,6 +242,7 @@ end
 
 # ╔═╡ bcff8e16-864e-401d-b419-935499704b3d
 let
+	# PNG save
 	l = @layout [
 		grid(1,2); grid(1,3)
 	]
@@ -249,8 +256,26 @@ let
 
 	savefig("../figures/panel_predictability.png")
 	savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.png")
-	savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.pdf")
 	p
+end
+
+# ╔═╡ f205c5e3-afcc-4a62-beba-552c9465d0b9
+let
+	l = @layout [
+		grid(1,2); grid(1,3)
+	]
+	plots_pfix = make_plots_pfix(; marker=(:star4, 16, stroke(0)))
+	p = plot(
+		plot_inertia, plot_Tc, plots_pfix...; 
+		layout=l, size = (2400, 1600), margin = 15mm,
+		dpi = 300,
+		colorbar_title = "Probabiliyt of overlap",
+		colorbar_titlefontsize = 24,
+	)
+	plot!(p, gridalpha=0.05)
+	
+	savefig("../figures/panel_predictability.pdf")
+	savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.pdf")
 end
 
 # ╔═╡ Cell order:
@@ -259,6 +284,8 @@ end
 # ╠═ae30fe90-9aaf-4ef6-add2-87ac34307c06
 # ╠═edcaa2dc-3715-4d0d-a87d-16595b3064fa
 # ╠═bcff8e16-864e-401d-b419-935499704b3d
+# ╠═59ad6a60-464f-4eea-bb2e-bbffcee5835b
+# ╠═f205c5e3-afcc-4a62-beba-552c9465d0b9
 # ╠═916855f7-0a6e-4864-ad74-52c3980fa3f3
 # ╟─2c5b4f24-f332-48e9-9e24-3559f4bb29e7
 # ╠═b527df5f-7d64-42b8-89c9-87709bd8ae2d
@@ -267,6 +294,7 @@ end
 # ╟─4ca53bb5-823e-4ab0-9bfd-f20ece94a182
 # ╠═69281b36-2616-4116-adf2-3fa9b120f593
 # ╠═e6b3c4c4-2003-4adc-a1b8-70d3ddfbf4ab
+# ╠═a9bf4053-66b5-4451-b461-a3814e200534
 # ╠═795db63d-5612-44ea-9fb9-87abbf99ab69
 # ╠═d4f39251-eff9-4164-86da-51dc8e64ba4f
 # ╠═0ce58257-c14e-4329-8f3a-df122d5d022f
