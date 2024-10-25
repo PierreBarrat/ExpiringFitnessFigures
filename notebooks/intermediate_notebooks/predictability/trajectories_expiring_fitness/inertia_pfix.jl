@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.37
+# v0.19.45
 
 using Markdown
 using InteractiveUtils
@@ -113,11 +113,13 @@ names(dat_all)
 # ╔═╡ 5f687fbd-bbcd-4524-9eff-11f9493112c7
 names(dat)
 
-# ╔═╡ 14e7e798-adcf-4d3e-bbab-0d09eb73874a
-
-
 # ╔═╡ cffe4bb0-378d-4a0a-b51f-7fe9a3230958
-always_below=true
+begin
+    always_below=true
+    δf = 0.025 # half width of the frequency bin
+    # lower δf values --> noisy curves
+    # higher δf values --> overestimates pfix (why?)
+end
 
 # ╔═╡ 3f5f64e2-ed11-47a7-a7b1-a4ceabde628e
 function get_mean_trajectory(trajectories, fb; kwargs...)
@@ -174,7 +176,7 @@ end
 
 # ╔═╡ 54342047-a26e-4d2f-8f42-9f6bbb8f7816
 function pfix_v_f(trajectories)
-	fbs = [FrequencyBin(f, 0.01) for f in .2:.1:.8]
+	fbs = [FrequencyBin(f, δf) for f in .2:.1:.8]
 	pfix = 	map(fbs) do fb
 		fixation_probability(T -> FT.inbin(T, fb; always_below), trajectories)
 	end
@@ -225,9 +227,6 @@ p2 = let
 	)
 end
 
-# ╔═╡ 4109d6ab-f275-4d1b-b159-a745da80360e
-length(plt_dict_pfix)
-
 # ╔═╡ Cell order:
 # ╠═eadd1d72-d1f5-11ed-098a-11e1b44a86a9
 # ╠═a55b7fe0-798b-4eca-b795-ee1342721d08
@@ -248,7 +247,6 @@ length(plt_dict_pfix)
 # ╠═8e892a2e-c51d-405c-aa3a-3036bcf36a2c
 # ╠═063cb3a3-1a08-4b3c-b407-57541a93581c
 # ╠═c13f9cca-a534-4ecf-9b7a-0f8d4f825e55
-# ╠═4109d6ab-f275-4d1b-b159-a745da80360e
 # ╟─f57bc80a-ab12-4911-bf98-3b3eefcb8ead
 # ╠═6773d67d-2492-48b3-8c66-ee1199148606
 # ╠═5f687fbd-bbcd-4524-9eff-11f9493112c7
@@ -257,5 +255,4 @@ length(plt_dict_pfix)
 # ╠═ed3510c5-56f5-4404-9095-6d37cf6ad274
 # ╠═64bf3d22-666d-49af-9ba0-70a3858bc5fb
 # ╠═54342047-a26e-4d2f-8f42-9f6bbb8f7816
-# ╠═14e7e798-adcf-4d3e-bbab-0d09eb73874a
 # ╠═cffe4bb0-378d-4a0a-b51f-7fe9a3230958

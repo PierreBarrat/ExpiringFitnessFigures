@@ -35,6 +35,8 @@ begin
 	N = 1_000_000
 	L = 150
 	μ = 0
+    f0 = 0.01
+    max_freq = f0
 	md"**Constants**"
 end
 
@@ -44,20 +46,21 @@ begin
 	svals = [s0]
 	ρvals = ρvals = [1/20, 1/5, 1] * s0
     Δtvals = [10]
+    cfs_vals = [:random]
 	md"**Variable parameters**"
 end
 
 # ╔═╡ 1110d7fa-9c96-4b40-ae60-2396a08d4db0
-parameters = map(Iterators.product(Δtvals, ρvals, svals)) do (Δt, ρ, s)
-	(s=s, ρ=ρ, Δt=Δt)
+parameters = map(Iterators.product(cfs_vals, Δtvals, ρvals, svals)) do (cfs, Δt, ρ, s)
+	(s=s, ρ=ρ, Δt=Δt, cfs=cfs)
 end |> (x -> vcat(x...));
 
 # ╔═╡ bbb24ac7-d514-4343-8c07-5f017ce45e0b
-function simulate(s, ρ; Δt = 1)
+function simulate(s, ρ; Δt = 1, change_field_time)
 	# setting parameters
 	fitness_distribution = Exponential(s/2)
 
-	T = max(500/ρ, 500/s)
+	T = max(1000/ρ, 1000/s)
 	
 	switchgen = round(Int, 1/ρ)
 
@@ -80,9 +83,10 @@ function simulate(s, ρ; Δt = 1)
 		pop, T, Δt, cb;
 		fitness_distribution,
 		switchgen, 
-		change_init_field=true, 
-		change_field_time = :periodic,
-		max_freq=0., 
+		change_init_field = true,
+		change_field_time,
+		max_freq,
+        f0,
 	)
 
 	diversity = map(cb_vals) do x
@@ -104,7 +108,7 @@ trajectories, diversity = let
 	div = Dict()
 	for (i, p) in enumerate(parameters)
 		@info p i/length(parameters)
-		@time T, d = simulate(p.s, p.ρ; Δt=p.Δt)
+		@time T, d = simulate(p.s, p.ρ; Δt=p.Δt, change_field_time = p.cfs)
 		tjs[p] = T
 		
 		df = DataFrame()
@@ -124,6 +128,7 @@ filenames = map(enumerate(collect(keys(trajectories)))) do (idx, p)
 		Δt = p.Δt,
 		L = L,
 		N = N,
+        cfs = p.cfs,
 		trajectory_file = "trajectory_$(idx).csv",
 		diversity_file = "diversity_$(idx).csv",
 		idx = idx,

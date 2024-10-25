@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.38
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -123,14 +123,17 @@ panel = let
 	)
 end
 
-# ╔═╡ 0696369f-4bbe-4633-ba3d-8cdc2542acf7
-savefig(panel, "../figures/expfit_randomwalk_panel.png")
-
-# ╔═╡ 37aca45f-e245-4234-b2d7-b736716e87a6
-savefig(joinpath(
-	homedir(), 
-	"Documents/BaleLabo/Notes/ExpiringFitness/figures/expfit_randomwalk_panel.png"
-))
+# ╔═╡ 38c5b59c-23a8-4344-9b78-90a740480c69
+begin
+	# saving to data directory
+	savefig(panel, "../figures/expfit_randomwalk_panel.png")
+	# saving to article directory
+	article_figures = joinpath(
+		homedir(), "Documents/BaleLabo/Notes/ExpiringFitness/figures/"
+	)
+	savefig(panel, joinpath(article_figures, "expfit_randomwalk_panel.png"))
+	savefig(panel, joinpath(article_figures, "expfit_randomwalk_panel.pdf"))
+end
 
 # ╔═╡ f94e0d7d-e3e8-4810-85ac-6f391488acb3
 filler = plot(rand(10), title="FILLER");
@@ -145,6 +148,5 @@ filler = plot(rand(10), title="FILLER");
 # ╠═70cc04b3-1d67-47f1-83d9-537c03fed930
 # ╠═514cd78e-bc5d-4a31-ba96-66c7477098c7
 # ╠═8cf42471-7ed4-475b-a5d9-1b23b3912bdb
-# ╠═0696369f-4bbe-4633-ba3d-8cdc2542acf7
-# ╠═37aca45f-e245-4234-b2d7-b736716e87a6
+# ╠═38c5b59c-23a8-4344-9b78-90a740480c69
 # ╠═f94e0d7d-e3e8-4810-85ac-6f391488acb3

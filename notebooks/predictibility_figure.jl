@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.45
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -79,7 +79,7 @@ plot_Tc = let
 		# ylabel = L"T_{MRCA}",
 		ylabel = "coalescence time",
 		frame=:box,
-		colorbar_title = text("Probability of overlap", 24),
+		colorbar_title = text("Probability of overlap ", 22),
 		size = (1200, 800),
 		right_margin = 20mm,
 		# colorbar=false,
@@ -116,6 +116,15 @@ md"## Pfixation plots"
 # ╔═╡ 69281b36-2616-4116-adf2-3fa9b120f593
 S_to_vec(S) = @chain split(S, r",| |\[|\]") filter!(!isempty, _) parse.(Float64, _)
 
+# ╔═╡ e6b3c4c4-2003-4adc-a1b8-70d3ddfbf4ab
+function estimate_pfix(x, s0, α)
+	P(β) = (1-β)^(α/s0 - 1)
+	eps = 1e-4
+	Z = quadgk(β -> P(β), eps, 1-eps)[1]
+
+	return x * quadgk(β -> P(β)/Z, eps, x)[1] + quadgk(β -> β*P(β)/Z, x, 1-eps)[1]
+end
+
 # ╔═╡ d4f39251-eff9-4164-86da-51dc8e64ba4f
 data_pfix = let
 	df = DataFrame(CSV.File(
@@ -127,15 +136,6 @@ data_pfix = let
 		[:f, :pfix] => ByRow((x1, x2) -> (S_to_vec(x1), S_to_vec(x2))) => [:f, :pfix]
 	)
 end;
-
-# ╔═╡ e6b3c4c4-2003-4adc-a1b8-70d3ddfbf4ab
-function estimate_pfix(x, s0, α)
-	P(β) = (1-β)^(α/s0 - 1)
-	eps = 1e-4
-	Z = quadgk(β -> P(β), eps, 1-eps)[1]
-
-	return x * quadgk(β -> P(β)/Z, eps, x)[1] + quadgk(β -> β*P(β)/Z, x, 1-eps)[1]
-end
 
 # ╔═╡ 795db63d-5612-44ea-9fb9-87abbf99ab69
 plots_pfix = let
@@ -158,7 +158,7 @@ plots_pfix = let
 		for (i, r) in enumerate(eachrow(dat))
 			plot!(
 				p, r.f, r.pfix;
-				label="α/s=$(round(r.α/r.s; sigdigits=2))", 
+				label="ν/s=$(round(r.α/r.s; sigdigits=2))", 
 				marker=(:cross, 12),
 				linewidth = 5,
 				color = pal[i],
@@ -219,7 +219,7 @@ plot_inertia = let
 	for (i, r) in enumerate(eachrow(dat))
 		plot!(
 			p, r.mt, r.mf;
-			label="α/s=$(round(r.α/r.s; sigdigits=2))",
+			label="ν/s=$(round(r.α/r.s; sigdigits=2))",
 			linewidth = 5,
 			color = pal[i],
 		)
@@ -243,10 +243,13 @@ let
 		plot_inertia, plot_Tc, plots_pfix...; 
 		layout=l, size = (2400, 1600), margin = 15mm,
 		dpi = 300,
+		colorbar_title = "Probabiliyt of overlap",
+		colorbar_titlefontsize = 24,
 	)
 
 	savefig("../figures/panel_predictability.png")
 	savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.png")
+	savefig(homedir() * "/Documents/BaleLabo/Notes/ExpiringFitness/figures/panel_predictability.pdf")
 	p
 end
 
@@ -263,9 +266,9 @@ end
 # ╠═ef39ad11-38d8-4343-8db9-a5cfa2ea006e
 # ╟─4ca53bb5-823e-4ab0-9bfd-f20ece94a182
 # ╠═69281b36-2616-4116-adf2-3fa9b120f593
-# ╠═d4f39251-eff9-4164-86da-51dc8e64ba4f
 # ╠═e6b3c4c4-2003-4adc-a1b8-70d3ddfbf4ab
 # ╠═795db63d-5612-44ea-9fb9-87abbf99ab69
+# ╠═d4f39251-eff9-4164-86da-51dc8e64ba4f
 # ╠═0ce58257-c14e-4329-8f3a-df122d5d022f
 # ╟─73e7f564-c10b-4c48-91d2-8d44676042ed
 # ╠═0bd31d06-9430-470b-a49c-27b1e75c2f84

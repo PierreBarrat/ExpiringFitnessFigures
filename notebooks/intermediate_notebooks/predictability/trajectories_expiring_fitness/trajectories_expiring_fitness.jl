@@ -35,11 +35,13 @@ mkpath(savedir)
 
 # ╔═╡ 0ed067a4-3780-432b-bd54-9d52a22f2bbf
 begin
-    N = 50_000
-    L = 400
+    N = 100_000
+    L = 500
     selected_sites = 1:L
     neutral_sites = 0:-1
     μ = 0
+    f0 = 0.05
+    max_freq = f0
     sweep_times = :random
     md"**Constants**"
 end
@@ -51,6 +53,7 @@ s0 = 0.03
 begin
     ρvals = [1/20, 1/5, 1] * s0
     αvals = [0., 1/3, 1, 3] * s0
+    # αvals = [0.]
 end
 
 # ╔═╡ 8a82ed87-ca19-4afd-b6ed-090d1bdc20a7
@@ -67,7 +70,7 @@ parameters = map(Iterators.product(αvals, ρvals)) do (α, ρ)
     mβ = s0 / (s0 + α)
     β2 = s0/(s0 + α) * 2*s0 / (2*s0 + α) # for exponential distribution of s at fixed α
     Ne = get_Ne(ρ, β2)
-    T = min(round(Int, 2_000*Ne), 1_000_000)
+    T = min(round(Int, 2_000*Ne), 500_000)
     Δt = 10
 	(α=α, ρ=ρ, mβ = mβ, β2 = β2, T = T, Δt = Δt)
 end |> x -> vcat(x...)
@@ -110,8 +113,9 @@ function simulate(
         switchgen,
         change_init_field=false,
         change_field_time = sweep_times,
-        max_freq=0.,
-        selected_positions=selected_sites,
+        f0 = f0,
+        max_freq = max_freq,
+        selected_positions = selected_sites,
         burnin = get_Ne(ρ, β2),
     )
 

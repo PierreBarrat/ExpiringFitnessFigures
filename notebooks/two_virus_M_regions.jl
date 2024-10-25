@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.45
+# v0.19.46
 
 using Markdown
 using InteractiveUtils
@@ -549,6 +549,10 @@ let
 	savefig(joinpath(
 		homedir(), 
 		"Documents/BaleLabo/Notes/ExpiringFitness/figures/variant_invasion_SIR.png"
+	))
+	savefig(joinpath(
+		homedir(), 
+		"Documents/BaleLabo/Notes/ExpiringFitness/figures/variant_invasion_SIR.pdf"
 	))
 	panel
 end

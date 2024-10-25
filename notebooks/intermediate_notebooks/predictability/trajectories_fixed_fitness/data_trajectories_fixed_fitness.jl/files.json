@@ -5,43 +5,49 @@
         "Δt": 10,
         "L": 150,
         "N": 1000000,
+        "cfs": "random",
         "trajectory_file": "trajectory_2.csv",
         "diversity_file": "diversity_2.csv",
         "idx": 2,
         "key": {
             "s": 0.03,
             "ρ": 0.0015,
-            "Δt": 10
+            "Δt": 10,
+            "cfs": "random"
         }
     },
     "3": {
-        "ρ": 0.006,
-        "s": 0.03,
-        "Δt": 10,
-        "L": 150,
-        "N": 1000000,
-        "trajectory_file": "trajectory_3.csv",
-        "diversity_file": "diversity_3.csv",
-        "idx": 3,
-        "key": {
-            "s": 0.03,
-            "ρ": 0.006,
-            "Δt": 10
-        }
-    },
-    "1": {
         "ρ": 0.03,
         "s": 0.03,
         "Δt": 10,
         "L": 150,
         "N": 1000000,
+        "cfs": "random",
+        "trajectory_file": "trajectory_3.csv",
+        "diversity_file": "diversity_3.csv",
+        "idx": 3,
+        "key": {
+            "s": 0.03,
+            "ρ": 0.03,
+            "Δt": 10,
+            "cfs": "random"
+        }
+    },
+    "1": {
+        "ρ": 0.006,
+        "s": 0.03,
+        "Δt": 10,
+        "L": 150,
+        "N": 1000000,
+        "cfs": "random",
         "trajectory_file": "trajectory_1.csv",
         "diversity_file": "diversity_1.csv",
         "idx": 1,
         "key": {
             "s": 0.03,
-            "ρ": 0.03,
-            "Δt": 10
+            "ρ": 0.006,
+            "Δt": 10,
+            "cfs": "random"
         }
     }
 }
